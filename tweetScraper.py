@@ -11,21 +11,11 @@ source = urllib.request.urlopen('https://twitter.com/potus?lang=en').read()
 # creates the object "soup" which stores the source and lxml
 soup = bs.BeautifulSoup(source, 'lxml')
 
-# gets the title of the page
-print(soup.title)
-
-# get attributes:
-print(soup.title.name)
-
-# get values:
+# get twitter user's name:
 print(soup.title.string)
 
-# beginning navigation:
-print(soup.title.parent.name)
-
-# getting specific values:
-#print(soup.p)
-#print(soup.get_text())
-
+# stores the tweet into the "tweet" object
 tweet = soup.find('div', attrs = {'class' : 'js-tweet-text-container'})
-print(tweet)
+print(tweet.get_text())
+
+#tweet2 = soup.find_next_sibling(div', attrs = {'class' : 'js-tweet-text-container'})
