@@ -1,21 +1,41 @@
 # @author: Finnian Allen
 # Start Date: 5/8/2019
 # Description: This project aims to make use of various twitter
-# posts by scraping individula tweets and storing them for analysis
+# posts by scraping individual tweets and storing them for analysis
+# currently runs until ctrl-c, this is so it can update every 30
+# seconds
 
 import bs4 as bs
 import urllib.request
+import time
 
-source = urllib.request.urlopen('https://twitter.com/potus?lang=en').read()
+def scrape():
+    # sets the url of the twitter account to scrape
+    source = urllib.request.urlopen('https://twitter.com/potus?lang=en').read()
+    
+    # creates the object "soup" which stores the source and lxml
+    soup = bs.BeautifulSoup(source, 'lxml')
+    
+    # get twitter user's name:
+    print(soup.title.string)
 
-# creates the object "soup" which stores the source and lxml
-soup = bs.BeautifulSoup(source, 'lxml')
+    # stores the tweet into the "tweet" object
+    tweet = soup.find('div', attrs = {'class' : 'js-tweet-text-container'})
+    print(tweet.get_text())
 
-# get twitter user's name:
-print(soup.title.string)
+    # call to updater for the recursion
+    updater()
 
-# stores the tweet into the "tweet" object
-tweet = soup.find('div', attrs = {'class' : 'js-tweet-text-container'})
-print(tweet.get_text())
+    
 
-#tweet2 = soup.find_next_sibling(div', attrs = {'class' : 'js-tweet-text-container'})
+def updater():
+    start_time = time.time()
+    
+    # loops and scrapes once the condition the time interval has passed
+    while(True):
+        if(time.time() - start_time > 15):
+            scrape()
+            
+
+
+updater()
